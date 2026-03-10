@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dashboard</title>
+<style>
+body{font-family:Arial;margin:40px;background:#fafafa}
+input{padding:10px;width:400px}
+button{padding:10px 20px}
+.client{background:white;border:1px solid #ddd;padding:15px;margin-top:15px}
+</style>
+</head>
+<body>
+
+<h2>Tambah Client Gallery</h2>
+
+<input id="namaWeb" placeholder="Nama Client"><br><br>
+<input id="driveLink" placeholder="Paste Link Google Drive Folder"><br><br>
+
+<button onclick="saveClient()">Generate Link</button>
+
+<h3>List Client</h3>
+<div id="list"></div>
+
+<script>
+
+if(localStorage.getItem("login")!=="true"){
+location.href="/login.html"
+}
+
+async function saveClient(){
+
+let nama=document.getElementById("namaWeb").value
+let drive=document.getElementById("driveLink").value
+
+await fetch("/api/saveClient",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({nama,drive})
+})
+
+load()
+
+}
+
+async function load(){
+
+let r=await fetch("/api/getClients")
+let data=await r.json()
+
+let html=""
+
+data.forEach(c=>{
+
+let link=location.origin+"/gallery.html?id="+c.id
+
+html+=`
+<div class="client">
+
+<b>${c.nama}</b>
+
+<br><br>
+
+<input value="${link}" style="width:420px">
+
+<br><br>
+
+<button onclick="navigator.clipboard.writeText('${link}')">Copy Link</button>
+
+<a href="${link}" target="_blank">
+<button>Open</button>
+</a>
+
+</div>
+`
+})
+
+document.getElementById("list").innerHTML=html
+
+}
+
+load()
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Admin Login</title>
+</head>
+<body>
+<h2>Admin Login</h2>
+
+<input id="username" placeholder="Username"><br><br>
+<input id="password" type="password" placeholder="Password"><br><br>
+
+<button onclick="login()">Login</button>
+
+<script>
+function login(){
+
+let u=document.getElementById("username").value
+let p=document.getElementById("password").value
+
+if(u==="admin" && p==="dfsyg2002"){
+localStorage.setItem("login","true")
+location.href="/dashboard.html"
+}else{
+alert("Login gagal")
+}
+
+}
+</script>
+
+</body>
+</html>
